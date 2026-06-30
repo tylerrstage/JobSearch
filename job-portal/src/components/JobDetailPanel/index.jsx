@@ -38,13 +38,6 @@ function JobDetailPanel({ job }) {
       </div>
 
       <div className='mt-6'>
-        <h3 className='text-lg font-semibold text-gray-900'>Description</h3>
-        <p className='mt-2 text-sm leading-6 text-gray-700'>
-          {job.description || 'A great opportunity to join a growing team and make an impact.'}
-        </p>
-      </div>
-
-      <div className='mt-6'>
         <h3 className='text-lg font-semibold text-gray-900'>Skills</h3>
         <div className='mt-3 flex flex-wrap gap-2'>
           {skills.map((skill) => (
@@ -62,6 +55,13 @@ function JobDetailPanel({ job }) {
           <li><span className='font-semibold'>Experience:</span> {job.experience}</li>
           <li><span className='font-semibold'>Posted:</span> {job.postedOn ? new Date(job.postedOn).toLocaleDateString() : 'Recently posted'}</li>
         </ul>
+      </div>
+      
+      <div className='mt-6'>
+        <h3 className='text-lg font-semibold text-gray-900'>Description</h3>
+        <p className='mt-2 text-sm leading-6 text-gray-700'>
+          {job.description || 'A great opportunity to join a growing team and make an impact.'}
+        </p>
       </div>
     </div>
   )
