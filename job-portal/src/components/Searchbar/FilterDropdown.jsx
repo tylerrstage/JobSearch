@@ -101,16 +101,16 @@ export default function FilterDropdown({
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-haspopup="listbox"
-        className={`flex items-center gap-2 cursor-pointer rounded-full border px-4 py-2 text-sm font-medium shadow-sm transition-colors
+        className={`flex items-center gap-2 cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors
           ${
             open
-              ? "border-blue-600 text-blue-700 bg-blue-50"
-              : "border-gray-300 text-gray-800 bg-white hover:border-gray-400 hover:bg-gray-100"
+              ? "shadow-glow border-accent-400 text-navy-600 bg-white"
+              : "shadow-float border-gray-300 text-gray-800 bg-white hover:border-accent-300 hover:bg-gray-100"
           }`}
       >
         <span>{label}</span>
         {hasSelection && (
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-900 text-xs font-semibold text-white">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-ink-900 text-xs font-semibold text-white">
             {selected.length}
           </span>
         )}
@@ -136,19 +136,19 @@ export default function FilterDropdown({
                     role="option"
                     aria-selected={isSelected}
                     onClick={() => toggleOption(option)}
-                    className="mx-2 my-0.5 flex w-[calc(100%-1rem)] items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-gray-700 transition-colors hover:bg-gray-50"
+                    className="mx-2 my-0.5 flex w-[calc(100%-1rem)] items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-gray-700 transition-colors hover:bg-accent-200/30"
                   >
                     <span
                       className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-colors
                         ${
                           isSelected
-                            ? "border-blue-600 bg-blue-600"
+                            ? "border-navy-700 bg-navy-700"
                             : "border-gray-300 bg-white"
                         }`}
                     >
                       {isSelected && <CheckIcon className="text-white" />}
                     </span>
-                    <span className={isSelected ? "text-blue-700" : ""}>{option}</span>
+                    <span className={isSelected ? "text-navy-800 font-medium" : ""}>{option}</span>
                   </button>
                 </li>
               );
@@ -164,7 +164,7 @@ export default function FilterDropdown({
               className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors
                 ${
                   hasSelection
-                    ? "text-blue-700 hover:bg-blue-50"
+                    ? "text-navy-800 hover:bg-accent-200/30"
                     : "cursor-not-allowed text-gray-300"
                 }`}
             >

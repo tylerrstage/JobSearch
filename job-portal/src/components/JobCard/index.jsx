@@ -3,7 +3,7 @@ import React from 'react'
 function JobCard({ title, company, location, salary, city, state, isRemote, isSelected, onClick }) {
   return (
     <div
-      className={`mb-3 rounded-lg border p-4 transition ${isSelected ? 'border-blue-500 bg-blue-50 shadow-sm' : 'border-gray-200 bg-white hover:border-blue-300 hover:bg-gray-50'}`}
+      className={`mb-3 rounded-lg border p-4 transition ${isSelected ? 'border-accent-400 bg-accent-200/25 shadow-sm' : 'border-gray-200 bg-white hover:border-accent-300 hover:bg-gray-50'}`}
       onClick={onClick}
     >
       <div className='flex items-start justify-between gap-4'>

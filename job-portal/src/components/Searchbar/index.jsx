@@ -89,7 +89,8 @@ const Searchbar = forwardRef(function Searchbar(props, ref) {
 
         <ResetAllFiltersButton onReset={resetAllFilters} label="Reset filters" disabled={!hasActiveFilters} />
 
-        <button onClick={search} className='bg-blue-500 text-white font-bold py-2 px-6 rounded-full shadow-sm hover:bg-blue-600 cursor-pointer'>Search</button>
+        <button onClick={search} className='shadow-float-dark bg-ink-900 text-white font-bold py-2 px-6 rounded-full 
+        hover:bg-ink-800 active:bg-black cursor-pointer transition-colors'>Search</button>
     </div>
   )
 })

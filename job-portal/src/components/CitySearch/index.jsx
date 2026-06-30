@@ -40,7 +40,7 @@ function CitySearch({ value = '', onChange, onSearch }) {
 
   return (
     <div className='flex justify-center px-10 pt-6'>
-      <div className='flex w-full max-w-md items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 shadow-sm transition-colors focus-within:border-blue-500'>
+      <div className='glow-on-focus flex w-full max-w-md items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 transition-colors focus-within:border-accent-400'>
         <SearchIcon className='text-gray-400' />
         <input
           type='text'

@@ -56,24 +56,24 @@ function JobDetailPanel({ job }) {
     <div className='p-6'>
       <div className='flex flex-wrap items-start justify-between gap-4'>
         <div>
-          <p className='text-sm font-medium uppercase tracking-wide text-blue-600'>Job details</p>
+          <p className='text-sm font-medium uppercase tracking-wide text-navy-700'>Job details</p>
           <h2 className='mt-1 text-2xl font-semibold text-gray-900'>{job.title}</h2>
           <p className='text-lg text-gray-700'>{job.company}</p>
         </div>
         <a href={job.job_link} target='_blank' rel='noreferrer'>
-          <button className='rounded-md border border-blue-500 bg-blue-500 px-6 py-2 text-white transition cursor-pointer hover:bg-blue-600'>
+          <button className='rounded-full border border-ink-900 bg-ink-900 px-6 py-2 text-white transition cursor-pointer hover:bg-ink-800 active:bg-black'>
             Apply
           </button>
         </a>
       </div>
 
       <div className='mt-6 grid gap-3 sm:grid-cols-2'>
-        <div className='rounded-lg bg-gray-50 p-3'>
-          <p className='text-500 font-semibold text-gray-700'>Location</p>
+        <div className='rounded-lg border border-accent-200/70 bg-gray-50 p-3'>
+          <p className='text-500 font-semibold text-navy-800'>Location</p>
           <p className='text-500 font-bold text-gray-900'>{job.location}</p>
         </div>
-        <div className='rounded-lg bg-gray-50 p-3'>
-          <p className='text-500 font-semibold text-gray-700'>Salary</p>
+        <div className='rounded-lg border border-accent-200/70 bg-gray-50 p-3'>
+          <p className='text-500 font-semibold text-navy-800'>Salary</p>
           <p className='text-500 font-bold text-gray-900'>{job.salary || 'Salary not listed'}</p>
         </div>
       </div>
@@ -111,7 +111,7 @@ function JobDetailPanel({ job }) {
           <button
             type='button'
             onClick={() => setIsDescriptionExpanded((prev) => !prev)}
-            className='mt-2 flex items-center gap-1 text-sm font-semibold text-blue-600 transition hover:text-blue-700 cursor-pointer'
+            className='mt-2 flex items-center gap-1 text-sm font-semibold text-navy-700 transition hover:text-navy-800 cursor-pointer'
           >
             {isDescriptionExpanded ? 'Read less' : 'Read more'}
             <ChevronDownIcon

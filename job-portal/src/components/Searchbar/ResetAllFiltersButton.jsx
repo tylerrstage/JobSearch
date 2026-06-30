@@ -29,7 +29,7 @@ export function ResetAllFiltersButton({ onReset, label = "Reset all filters", di
       className={`rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
         disabled
           ? "cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400"
-          : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50"
+          : "shadow-float border-gray-300 bg-white text-gray-700 hover:border-accent-300 hover:bg-accent-200/20"
       }`}
     >
       {label}

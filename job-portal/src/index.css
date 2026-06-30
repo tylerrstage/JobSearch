@@ -1,7 +1,93 @@
 @import "tailwindcss";
 
+@theme {
+  --color-navy-950: #050816;
+  --color-navy-900: #0a0e27;
+  --color-navy-800: #101b3f;
+  --color-navy-700: #16285a;
+  --color-navy-600: #1d3672;
+
+  --color-accent-200: #c7dcfc;
+  --color-accent-300: #9cc0f8;
+  --color-accent-400: #74a4f0;
+  --color-accent-500: #5286e6;
+
+  --color-ink-950: #0a0a0d;
+  --color-ink-900: #121216;
+  --color-ink-800: #1e1e24;
+
+  --color-panel-100: #EFF2FA;
+}
+
 @layer base {
   body {
-    background: linear-gradient(to right, #4e4376, #2b5876);
+    background: radial-gradient(ellipse 70% 55% at 28% 0%, rgba(94, 142, 230, 0.35), transparent 60%),
+      linear-gradient(160deg, #050816 0%, #0a0e27 30%, #142a5e 65%, #0a1230 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  /* Gives light (white) pill buttons a pronounced, accent-tinted shadow so
+     they appear to float above the dark navy background; lifts further on hover. */
+  .shadow-float {
+    box-shadow:
+      0 14px 28px -10px rgba(4, 8, 26, 0.6),
+      0 6px 16px -6px rgba(94, 142, 230, 0.45);
+    transition: box-shadow 200ms ease, transform 200ms ease;
+  }
+  .shadow-float:hover {
+    box-shadow:
+      0 20px 40px -10px rgba(4, 8, 26, 0.7),
+      0 10px 24px -6px rgba(94, 142, 230, 0.6);
+    transform: translateY(-3px);
+  }
+  .shadow-float:active {
+    transform: translateY(-1px);
+  }
+
+  /* Lights up the outline the same way an open filter button does, for
+     non-button surfaces (e.g. the city search bar) when clicked into.
+     No hover lift/transform here since this wraps an input, not a button. */
+  .glow-on-focus {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: box-shadow 200ms ease;
+  }
+  .glow-on-focus:focus-within {
+    box-shadow:
+      0 14px 28px -10px rgba(4, 8, 26, 0.6),
+      0 6px 16px -6px rgba(94, 142, 230, 0.45),
+      0 0 0 3px rgba(116, 164, 240, 0.45),
+      0 0 16px 2px rgba(116, 164, 240, 0.55);
+  }
+
+  /* Active/open state for filter buttons: keeps the same floating shadow as
+     shadow-float, but lights up the border with a glowing accent ring
+     instead of filling the button with a dark background. */
+  .shadow-glow {
+    box-shadow:
+      0 14px 28px -10px rgba(4, 8, 26, 0.6),
+      0 6px 16px -6px rgba(94, 142, 230, 0.45),
+      0 0 0 3px rgba(116, 164, 240, 0.45),
+      0 0 16px 2px rgba(116, 164, 240, 0.55);
+    transition: box-shadow 200ms ease, transform 200ms ease;
+  }
+
+  /* Same floating effect, tuned for dark (ink) buttons. */
+  .shadow-float-dark {
+    box-shadow:
+      0 16px 32px -10px rgba(0, 0, 0, 0.7),
+      0 6px 18px -6px rgba(94, 142, 230, 0.4);
+    transition: box-shadow 200ms ease, transform 200ms ease;
+  }
+  .shadow-float-dark:hover {
+    box-shadow:
+      0 22px 42px -10px rgba(0, 0, 0, 0.8),
+      0 10px 26px -6px rgba(94, 142, 230, 0.55);
+    transform: translateY(-3px);
+  }
+  .shadow-float-dark:active {
+    transform: translateY(-1px);
   }
 }
