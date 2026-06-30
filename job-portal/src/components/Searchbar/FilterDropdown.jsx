@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-function ChevronDownIcon({ className }) {
+export function ChevronDownIcon({ className }) {
   return (
     <svg
       className={className}

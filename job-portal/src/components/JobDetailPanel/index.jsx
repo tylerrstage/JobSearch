@@ -1,6 +1,35 @@
-import React from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { ChevronDownIcon } from '../Searchbar/FilterDropdown'
+
+const DESCRIPTION_COLLAPSED_HEIGHT = 120 // px, roughly 5 lines at text-sm/leading-6
 
 function JobDetailPanel({ job }) {
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
+  const [isLongDescription, setIsLongDescription] = useState(false)
+  const descriptionRef = useRef(null)
+
+  useEffect(() => {
+    setIsDescriptionExpanded(false)
+  }, [job?.id])
+
+  // Detect whether the description overflows the collapsed height so we know
+  // whether to show the fade mask + "Read more" toggle. scrollHeight reflects
+  // the full content size regardless of the max-height/overflow clipping, so
+  // this works whether the description is currently collapsed or expanded.
+  useLayoutEffect(() => {
+    const element = descriptionRef.current
+    if (!element) return
+
+    const checkOverflow = () => {
+      setIsLongDescription(element.scrollHeight > DESCRIPTION_COLLAPSED_HEIGHT + 1)
+    }
+
+    checkOverflow()
+
+    window.addEventListener('resize', checkOverflow)
+    return () => window.removeEventListener('resize', checkOverflow)
+  }, [job?.id, job?.description])
+
   if (!job) {
     return (
       <div className='flex h-full items-center justify-center p-8 text-center text-gray-500'>
@@ -10,6 +39,18 @@ function JobDetailPanel({ job }) {
   }
 
   const skills = Array.isArray(job.skills) && job.skills.length > 0 ? job.skills : ['No skills listed']
+  const description = job.description || 'A great opportunity to join a growing team and make an impact.'
+
+  const descriptionStyle = isDescriptionExpanded
+    ? undefined
+    : {
+        maxHeight: `${DESCRIPTION_COLLAPSED_HEIGHT}px`,
+        overflow: 'hidden',
+        ...(isLongDescription && {
+          maskImage: 'linear-gradient(to bottom, black 65%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 65%, transparent 100%)',
+        }),
+      }
 
   return (
     <div className='p-6'>
@@ -59,9 +100,25 @@ function JobDetailPanel({ job }) {
       
       <div className='mt-6'>
         <h3 className='text-lg font-semibold text-gray-900'>Description</h3>
-        <p className='mt-2 text-sm leading-6 text-gray-700'>
-          {job.description || 'A great opportunity to join a growing team and make an impact.'}
+        <p
+          ref={descriptionRef}
+          className='mt-2 text-sm leading-6 text-gray-700 transition-[max-height] duration-300'
+          style={descriptionStyle}
+        >
+          {description}
         </p>
+        {isLongDescription && (
+          <button
+            type='button'
+            onClick={() => setIsDescriptionExpanded((prev) => !prev)}
+            className='mt-2 flex items-center gap-1 text-sm font-semibold text-blue-600 transition hover:text-blue-700 cursor-pointer'
+          >
+            {isDescriptionExpanded ? 'Read less' : 'Read more'}
+            <ChevronDownIcon
+              className={`transition-transform ${isDescriptionExpanded ? 'rotate-180' : ''}`}
+            />
+          </button>
+        )}
       </div>
     </div>
   )

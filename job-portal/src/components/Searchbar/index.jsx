@@ -21,10 +21,10 @@ function Searchbar(props) {
 
     const search = async() => {
         const criteria = {
-            title: jobCriteria.title[0] || "",
-            location: jobCriteria.location[0] || "",
-            experience: jobCriteria.experience[0] || "",
-            type: jobCriteria.type[0] || ""
+            title: jobCriteria.title,
+            location: jobCriteria.location,
+            experience: jobCriteria.experience,
+            type: jobCriteria.type
         }
         await props.fetchJobsCustom(criteria);
     }
@@ -58,7 +58,7 @@ function Searchbar(props) {
         <FilterDropdown
             key={`type-${resetKey}`}
             label="Job Type"
-            options={["Full Time", "Part Time", "Contract"]}
+            options={["Full-time", "Part-time", "Contract"]}
             defaultSelected={jobCriteria.type}
             onChange={(value) => handleChange('type', value)}
         />
@@ -66,7 +66,7 @@ function Searchbar(props) {
         <FilterDropdown
             key={`location-${resetKey}`}
             label="Location"
-            options={["Remote", "On-site", "Hybrid"]}
+            options={["Remote", "On-site"]}
             defaultSelected={jobCriteria.location}
             onChange={(value) => handleChange('location', value)}
         />

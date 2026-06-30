@@ -33,21 +33,27 @@ function App() {
     setSelectedJob(tempJobs[0] || null);
   }
 
+  const getWorkplaceType = (job) => {
+    if (job.workplaceType) return job.workplaceType;
+    if (['Remote', 'On-site'].includes(job.location)) return job.location;
+    return job.isRemote ? 'Remote' : 'On-site';
+  };
+
   const fetchJobsCustom = async(jobCriteria) => {
     setCustomSearch(true);
 
     const normalizedCriteria = {
-      title: jobCriteria.title?.trim() || "",
-      location: jobCriteria.location?.trim() || "",
-      experience: jobCriteria.experience?.trim() || "",
-      type: jobCriteria.type?.trim() || ""
+      title: jobCriteria.title || [],
+      location: jobCriteria.location || [],
+      experience: jobCriteria.experience || [],
+      type: jobCriteria.type || []
     };
 
     const filteredJobs = allJobs.filter((job) => {
-      const matchesTitle = !normalizedCriteria.title || job.title === normalizedCriteria.title;
-      const matchesLocation = !normalizedCriteria.location || job.location === normalizedCriteria.location;
-      const matchesExperience = !normalizedCriteria.experience || job.experience === normalizedCriteria.experience;
-      const matchesType = !normalizedCriteria.type || job.type === normalizedCriteria.type;
+      const matchesTitle = normalizedCriteria.title.length === 0 || normalizedCriteria.title.includes(job.title);
+      const matchesLocation = normalizedCriteria.location.length === 0 || normalizedCriteria.location.includes(getWorkplaceType(job));
+      const matchesExperience = normalizedCriteria.experience.length === 0 || normalizedCriteria.experience.includes(job.experience);
+      const matchesType = normalizedCriteria.type.length === 0 || normalizedCriteria.type.includes(job.type);
 
       return matchesTitle && matchesLocation && matchesExperience && matchesType;
     });

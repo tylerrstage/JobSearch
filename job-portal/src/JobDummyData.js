@@ -21,7 +21,7 @@ export default [
         company: 'Amazon',
         type: 'Full Time',
         experience: 'Senior',
-        location: 'Hybrid',
+        location: 'On-site',
         skills: ["Python", "Django", "PostgreSQL"],
         city: 'Seattle',
         state: 'Washington',

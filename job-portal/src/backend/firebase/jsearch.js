@@ -96,15 +96,28 @@ function formatSalary(job) {
   return "Salary not listed";
 }
 
+function deriveWorkplaceType(job) {
+  return job.job_is_remote ? "Remote" : "On-site";
+}
+
+function deriveExperience(job) {
+  const title = (job.job_title || "").toLowerCase();
+
+  if (/\bintern(ship)?\b/.test(title)) return "Intern";
+  if (/\b(senior|lead|principal)\b/.test(title)) return "Senior";
+  return "Junior";
+}
+
 function mapJobToFirestore(job) {
   return {
     title: job.job_title || "Untitled",
     company: job.employer_name || "Unknown",
     type: job.job_employment_type || "Unknown",
-    experience: job.job_required_experience?.required_experience_in_field || "Not specified",
+    experience: deriveExperience(job),
     location: normalizeLocation(job),
+    workplaceType: deriveWorkplaceType(job),
     skills: extractSkills(job),
-    job_link: job.job_google_link || job.job_apply_link || "",
+    job_link: job.job_apply_link || job.employer_website || "",
     salary: formatSalary(job),
     description: job.job_description || "",
     isRemote: Boolean(job.job_is_remote),
