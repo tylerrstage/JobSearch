@@ -101,11 +101,11 @@ export default function FilterDropdown({
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-haspopup="listbox"
-        className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors
+        className={`flex items-center gap-2 cursor-pointer rounded-full border px-4 py-2 text-sm font-medium shadow-sm transition-colors
           ${
             open
               ? "border-blue-600 text-blue-700 bg-blue-50"
-              : "border-gray-300 text-gray-800 bg-white hover:border-gray-400"
+              : "border-gray-300 text-gray-800 bg-white hover:border-gray-400 hover:bg-gray-100"
           }`}
       >
         <span>{label}</span>
