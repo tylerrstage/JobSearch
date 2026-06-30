@@ -1,12 +1,14 @@
 import Navbar from './components/Navbar'
 import Header from './components/Header'
+import CitySearch from './components/CitySearch'
 import Searchbar from './components/Searchbar'
 import JobCard from './components/JobCard'
 import JobDetailPanel from './components/JobDetailPanel'
 import JobData from './JobDummyData'
 import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
 import { db } from './firebase.config.js';
-import { useState } from 'react';
+import { stripOtherLocationsSuffix, jobMatchesCity } from './utils/location.js';
+import { useState, useRef } from 'react';
 import { useEffect } from 'react';
 
 function App() {
@@ -14,9 +16,12 @@ function App() {
   const [jobs, setJobs] = useState(JobData);
   const [customSearch, setCustomSearch] = useState(false);
   const [selectedJob, setSelectedJob] = useState(JobData[0]);
+  const [cityQuery, setCityQuery] = useState('');
+  const searchbarRef = useRef(null);
 
   const fetchJobs = async() => {
     setCustomSearch(false);
+    setCityQuery('');
     const tempJobs =[]
     const jobsRef = query(collection(db, "jobs"));
     const q = query(jobsRef, orderBy("postedOn", "desc"));
@@ -25,6 +30,7 @@ function App() {
       tempJobs.push({
         ...job.data(),
         id: job.id,
+        location: stripOtherLocationsSuffix(job.data().location),
         postedOn: job.data().postedOn.toDate()
       });
     });
@@ -46,7 +52,8 @@ function App() {
       title: jobCriteria.title || [],
       location: jobCriteria.location || [],
       experience: jobCriteria.experience || [],
-      type: jobCriteria.type || []
+      type: jobCriteria.type || [],
+      city: jobCriteria.city || ''
     };
 
     const filteredJobs = allJobs.filter((job) => {
@@ -54,8 +61,9 @@ function App() {
       const matchesLocation = normalizedCriteria.location.length === 0 || normalizedCriteria.location.includes(getWorkplaceType(job));
       const matchesExperience = normalizedCriteria.experience.length === 0 || normalizedCriteria.experience.includes(job.experience);
       const matchesType = normalizedCriteria.type.length === 0 || normalizedCriteria.type.includes(job.type);
+      const matchesCity = jobMatchesCity(job, normalizedCriteria.city);
 
-      return matchesTitle && matchesLocation && matchesExperience && matchesType;
+      return matchesTitle && matchesLocation && matchesExperience && matchesType && matchesCity;
     });
 
     setJobs(filteredJobs);
@@ -70,7 +78,12 @@ function App() {
     <div>
       <Navbar customSearch={customSearch} onClearFilters={fetchJobs} />
       <Header />
-      <Searchbar fetchJobsCustom={fetchJobsCustom} onClearFilters={fetchJobs} />
+      <CitySearch
+        value={cityQuery}
+        onChange={setCityQuery}
+        onSearch={() => searchbarRef.current?.triggerSearch()}
+      />
+      <Searchbar ref={searchbarRef} cityQuery={cityQuery} fetchJobsCustom={fetchJobsCustom} onClearFilters={fetchJobs} />
       <div className='mx-60 mt-4 flex h-[63vh] flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm lg:flex-row'>
         <div className='w-full overflow-y-auto border-b border-gray-200 lg:w-[38%] lg:border-b-0 lg:border-r'>
           <div className='p-3'>

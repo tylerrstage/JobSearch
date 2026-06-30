@@ -1,9 +1,9 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useImperativeHandle, forwardRef } from 'react'
 import FilterDropdown from './FilterDropdown'
 import { ResetAllFiltersButton } from './ResetAllFiltersButton'
 
-function Searchbar(props) {
+const Searchbar = forwardRef(function Searchbar(props, ref) {
     const [jobCriteria, setJobCriteria] = useState({
         title: [],
         location: [],
@@ -24,10 +24,18 @@ function Searchbar(props) {
             title: jobCriteria.title,
             location: jobCriteria.location,
             experience: jobCriteria.experience,
-            type: jobCriteria.type
+            type: jobCriteria.type,
+            city: props.cityQuery || ''
         }
         await props.fetchJobsCustom(criteria);
     }
+
+    // Let a parent component (e.g. the city search bar) trigger the same
+    // search that the Search button runs, so pressing Enter there searches
+    // using these filters plus the current city query.
+    useImperativeHandle(ref, () => ({
+        triggerSearch: search
+    }))
 
     const hasActiveFilters = Object.values(jobCriteria).some((value) => value.length > 0)
 
@@ -84,6 +92,6 @@ function Searchbar(props) {
         <button onClick={search} className='bg-blue-500 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-600 cursor-pointer'>Search</button>
     </div>
   )
-}
+})
 
 export default Searchbar

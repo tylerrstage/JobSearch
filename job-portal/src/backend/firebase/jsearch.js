@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
 import { getFirestore, Timestamp, FieldValue } from "firebase-admin/firestore";
+import { stripOtherLocationsSuffix } from "../../utils/location.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,8 +34,10 @@ if (!admin.getApps().length) {
 const db = getFirestore();
 
 function normalizeLocation(job) {
-  if (job.job_location) return job.job_location;
+  // Prefer the discrete city/state fields since job_location can include a
+  // "(+N other)" suffix when the posting lists multiple locations.
   if (job.job_city && job.job_state) return `${job.job_city}, ${job.job_state}`;
+  if (job.job_location) return stripOtherLocationsSuffix(job.job_location);
   return job.job_city || "Remote";
 }
 
@@ -135,7 +138,7 @@ function createDocId(job) {
   return base.replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
-async function fetchJobs(query = "developer jobs in chicago") {
+async function fetchJobs(query = "developer jobs in texas") {
   const response = await axios.request({
     method: "GET",
     url: apiUrl,
