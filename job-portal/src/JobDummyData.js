@@ -11,6 +11,7 @@ export default [
         city: 'Austin',
         state: 'Texas',
         salary: '$80,000 - $100,000',
+        description: 'We are looking for a talented Frontend Developer to join our team and help us build cutting-edge web applications.',
         job_link: 'https://www.tesla.com/careers'
     },
     {
@@ -25,6 +26,7 @@ export default [
         city: 'Seattle',
         state: 'Washington',
         salary: '$120,000 - $150,000',
+        description: 'We are seeking a skilled Backend Developer to join our team and help us build scalable and efficient backend systems.',
         job_link: 'https://www.amazon.com/careers'
     }
 ]
