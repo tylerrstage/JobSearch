@@ -18,7 +18,6 @@ function JobDetailPanel({ job }) {
           <p className='text-sm font-medium uppercase tracking-wide text-blue-600'>Job details</p>
           <h2 className='mt-1 text-2xl font-semibold text-gray-900'>{job.title}</h2>
           <p className='text-lg text-gray-700'>{job.company}</p>
-          <p className='text-sm text-gray-600'>{job.city}, {job.state}</p>
         </div>
         <a href={job.job_link} target='_blank' rel='noreferrer'>
           <button className='rounded-md border border-blue-500 bg-blue-500 px-6 py-2 text-white transition cursor-pointer hover:bg-blue-600'>
@@ -34,7 +33,7 @@ function JobDetailPanel({ job }) {
         </div>
         <div className='rounded-lg bg-gray-50 p-3'>
           <p className='text-500 font-semibold text-gray-700'>Salary</p>
-          <p className='text-500 font-bold text-gray-900'>{job.salary}</p>
+          <p className='text-500 font-bold text-gray-900'>{job.salary || 'Salary not listed'}</p>
         </div>
       </div>
 

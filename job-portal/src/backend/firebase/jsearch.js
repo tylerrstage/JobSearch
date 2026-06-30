@@ -52,6 +52,50 @@ function extractSkills(job) {
   return [...new Set([...highlightSkills, ...keywordSkills])].slice(0, 8);
 }
 
+function formatSalary(job) {
+  const formatAmount = (amount) => `$${Number(amount).toLocaleString("en-US")}`;
+
+  const periodLabels = {
+    YEAR: "per year",
+    MONTH: "per month",
+    WEEK: "per week",
+    HOUR: "per hour",
+  };
+  const period = periodLabels[job.job_salary_period] || "";
+
+  const min = job.job_min_salary;
+  const max = job.job_max_salary;
+
+  if (min && max) {
+    return `${formatAmount(min)} - ${formatAmount(max)} ${period}`.trim();
+  }
+  if (min || max) {
+    return `${formatAmount(min || max)} ${period}`.trim();
+  }
+
+  const fallbackSalary = job.job_salary ?? job.job_salary_string;
+  if (fallbackSalary != null) {
+    if (typeof fallbackSalary === "number") return formatAmount(fallbackSalary);
+
+    const trimmed = String(fallbackSalary).trim();
+    if (!trimmed) return "Salary not listed";
+    // Strings like "80k-100k a year" or "133K–185K a year" come pre-formatted.
+    // Expand any k/m suffix into the full amount and prefix each number with $
+    // (skip non-numeric values like "Competitive" or strings that already have $).
+    if (!trimmed.includes("$") && /\d/.test(trimmed)) {
+      return trimmed.replace(/\b(\d[\d.,]*)([kKmM])?\b/g, (match, num, suffix) => {
+        const value = parseFloat(num.replace(/,/g, ""));
+        if (Number.isNaN(value)) return match;
+        const multiplier = suffix ? (/[kK]/.test(suffix) ? 1_000 : 1_000_000) : 1;
+        return `$${(value * multiplier).toLocaleString("en-US")}`;
+      });
+    }
+    return trimmed;
+  }
+
+  return "Salary not listed";
+}
+
 function mapJobToFirestore(job) {
   return {
     title: job.job_title || "Untitled",
@@ -61,7 +105,7 @@ function mapJobToFirestore(job) {
     location: normalizeLocation(job),
     skills: extractSkills(job),
     job_link: job.job_google_link || job.job_apply_link || "",
-    salary: job.job_salary || job.job_salary_string || null,
+    salary: formatSalary(job),
     description: job.job_description || "",
     isRemote: Boolean(job.job_is_remote),
     postedOn: job.job_posted_at_datetime_utc
