@@ -8,6 +8,9 @@ export default [
         experience: 'Junior',
         location: 'On-site',
         skills: ["JavaScript", "React", "Node.js"],
+        city: 'Austin',
+        state: 'Texas',
+        salary: '$80,000 - $100,000',
         job_link: 'https://www.tesla.com/careers'
     },
     {
@@ -19,6 +22,9 @@ export default [
         experience: 'Senior',
         location: 'Hybrid',
         skills: ["Python", "Django", "PostgreSQL"],
+        city: 'Seattle',
+        state: 'Washington',
+        salary: '$120,000 - $150,000',
         job_link: 'https://www.amazon.com/careers'
     }
 ]

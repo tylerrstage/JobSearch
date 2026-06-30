@@ -1,56 +1,87 @@
 import React from 'react'
 import { useState } from 'react'
+import FilterDropdown from './FilterDropdown'
+import { ResetAllFiltersButton } from './ResetAllFiltersButton'
 
 function Searchbar(props) {
     const [jobCriteria, setJobCriteria] = useState({
-        title: "",
-        location: "",
-        experience: "",
-        type: ""
+        title: [],
+        location: [],
+        experience: [],
+        type: []
     })
+    const [resetKey, setResetKey] = useState(0)
 
-    const handleChange = (e) => {
+    const handleChange = (field, value) => {
         setJobCriteria((prevState) => ({
             ...prevState,
-            [e.target.name]: e.target.value
+            [field]: value
         }))
     }
 
     const search = async() => {
-        await props.fetchJobsCustom(jobCriteria);
+        const criteria = {
+            title: jobCriteria.title[0] || "",
+            location: jobCriteria.location[0] || "",
+            experience: jobCriteria.experience[0] || "",
+            type: jobCriteria.type[0] || ""
+        }
+        await props.fetchJobsCustom(criteria);
+    }
+
+    const hasActiveFilters = Object.values(jobCriteria).some((value) => value.length > 0)
+
+    const resetAllFilters = async() => {
+        setJobCriteria({
+            title: [],
+            location: [],
+            experience: [],
+            type: []
+        })
+        setResetKey((prev) => prev + 1)
+
+        if (props.onClearFilters) {
+            await props.onClearFilters()
+        }
     }
 
   return (
-    <div className='flex gap-4 my-10 justify-center px-10'>
-        <select onChange={handleChange} name="title" value={jobCriteria.title} className='w-64 py-3 pl-4 bg-zinc-200 font-semibold rounded-md cursor-pointer'>
-            <option value="" disabled hidden selected>Job Role</option>
-            <option value="Frontend Developer">Frontend Developer</option>
-            <option value="Backend Developer">Backend Developer</option>
-            <option value="Full Stack Developer">Full Stack Developer</option>
-        </select>
+    <div className='flex flex-wrap gap-4 my-10 justify-center px-10'>
+        <FilterDropdown
+            key={`title-${resetKey}`}
+            label="Job Role"
+            options={["Frontend Developer", "Backend Developer", "Full Stack Developer"]}
+            defaultSelected={jobCriteria.title}
+            onChange={(value) => handleChange('title', value)}
+        />
 
-        <select onChange={handleChange} name="type" value={jobCriteria.type} className='w-64 py-3 pl-4 bg-zinc-200 font-semibold rounded-md cursor-pointer'>
-            <option value="" disabled hidden selected>Job Type</option>
-            <option value="Full Time">Full Time</option>
-            <option value="Part Time">Part Time</option>
-            <option value="Contract">Contract</option>
-        </select>
+        <FilterDropdown
+            key={`type-${resetKey}`}
+            label="Job Type"
+            options={["Full Time", "Part Time", "Contract"]}
+            defaultSelected={jobCriteria.type}
+            onChange={(value) => handleChange('type', value)}
+        />
 
-        <select onChange={handleChange} name="location" value={jobCriteria.location} className='w-64 py-3 pl-4 bg-zinc-200 font-semibold rounded-md cursor-pointer'>
-            <option value="" disabled hidden selected>Location</option>
-            <option value="Remote">Remote</option>
-            <option value="On-site">On-site</option>
-            <option value="Hybrid">Hybrid</option>
-        </select>
+        <FilterDropdown
+            key={`location-${resetKey}`}
+            label="Location"
+            options={["Remote", "On-site", "Hybrid"]}
+            defaultSelected={jobCriteria.location}
+            onChange={(value) => handleChange('location', value)}
+        />
 
-        <select onChange={handleChange} name="experience" value={jobCriteria.experience} className='w-64 py-3 pl-4 bg-zinc-200 font-semibold rounded-md cursor-pointer'>
-            <option value="" disabled hidden selected>Experience</option>
-            <option value="Intern">Intern</option>
-            <option value="Junior">Junior</option>
-            <option value="Senior">Senior</option>
-        </select>
+        <FilterDropdown
+            key={`experience-${resetKey}`}
+            label="Experience"
+            options={["Intern", "Junior", "Senior"]}
+            defaultSelected={jobCriteria.experience}
+            onChange={(value) => handleChange('experience', value)}
+        />
 
-        <button onClick={search} className='w-64 bg-blue-500 text-white font-bold py-3 rounded-md hover:bg-blue-600 cursor-pointer'>Search</button>
+        <ResetAllFiltersButton onReset={resetAllFilters} label="Reset filters" disabled={!hasActiveFilters} />
+
+        <button onClick={search} className='bg-blue-500 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-600 cursor-pointer'>Search</button>
     </div>
   )
 }
