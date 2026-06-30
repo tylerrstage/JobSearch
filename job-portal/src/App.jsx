@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 function App() {
+  const [allJobs, setAllJobs] = useState(JobData);
   const [jobs, setJobs] = useState(JobData);
   const [customSearch, setCustomSearch] = useState(false);
   const [selectedJob, setSelectedJob] = useState(JobData[0]);
@@ -27,28 +28,32 @@ function App() {
         postedOn: job.data().postedOn.toDate()
       });
     });
+    setAllJobs(tempJobs);
     setJobs(tempJobs);
     setSelectedJob(tempJobs[0] || null);
   }
 
   const fetchJobsCustom = async(jobCriteria) => {
     setCustomSearch(true);
-    const tempJobs =[]
-    const jobsRef = query(collection(db, "jobs"));
-    const q = query(jobsRef, where("type", "==", jobCriteria.type), where("title", "==", jobCriteria.title), 
-    where("location", "==", jobCriteria.location), where("experience", "==", jobCriteria.experience), 
-    orderBy("postedOn", "desc"));
-    const req = await getDocs(q);
 
-    req.forEach((job) => {
-      tempJobs.push({
-        ...job.data(),
-        id: job.id,
-        postedOn: job.data().postedOn.toDate()
-      });
+    const normalizedCriteria = {
+      title: jobCriteria.title?.trim() || "",
+      location: jobCriteria.location?.trim() || "",
+      experience: jobCriteria.experience?.trim() || "",
+      type: jobCriteria.type?.trim() || ""
+    };
+
+    const filteredJobs = allJobs.filter((job) => {
+      const matchesTitle = !normalizedCriteria.title || job.title === normalizedCriteria.title;
+      const matchesLocation = !normalizedCriteria.location || job.location === normalizedCriteria.location;
+      const matchesExperience = !normalizedCriteria.experience || job.experience === normalizedCriteria.experience;
+      const matchesType = !normalizedCriteria.type || job.type === normalizedCriteria.type;
+
+      return matchesTitle && matchesLocation && matchesExperience && matchesType;
     });
-    setJobs(tempJobs);
-    setSelectedJob(tempJobs[0] || null);
+
+    setJobs(filteredJobs);
+    setSelectedJob(filteredJobs[0] || null);
   }
 
   useEffect(() => {
