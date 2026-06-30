@@ -84,8 +84,8 @@ function App() {
         onSearch={() => searchbarRef.current?.triggerSearch()}
       />
       <Searchbar ref={searchbarRef} cityQuery={cityQuery} fetchJobsCustom={fetchJobsCustom} onClearFilters={fetchJobs} />
-      <div className='mx-60 mt-4 flex h-[63vh] flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm lg:flex-row'>
-        <div className='w-full overflow-y-auto border-b border-gray-200 lg:w-[38%] lg:border-b-0 lg:border-r'>
+      <div className='mx-60 mt-4 flex flex-col rounded-xl border border-gray-200 bg-white shadow-sm lg:flex-row'>
+        <div className='w-full border-b border-gray-200 lg:w-[38%] lg:border-b-0 lg:border-r'>
           <div className='p-3'>
             {jobs.map((job) => (
               <div key={job.id} onClick={() => setSelectedJob(job)} className='cursor-pointer'>
@@ -94,7 +94,9 @@ function App() {
             ))}
           </div>
         </div>
-        <div className='w-full overflow-y-auto lg:w-[62%]'>
+        {/* Sticks to the top of the viewport (with a slight gap) once page scroll
+            carries it there, and scrolls its own content internally from there on. */}
+        <div className='w-full lg:w-[62%] lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto'>
           <JobDetailPanel job={selectedJob} />
         </div>
       </div>
