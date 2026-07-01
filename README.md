@@ -206,18 +206,6 @@ See the [open issues](https://github.com/tylerrstage/JobSearch/issues) for a ful
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
-<!-- CONTACT -->
-## Contact
-
-Tyler Stageberg - tyler.stageberg@gmail.com
-
-Project Link: [https://github.com/tylerrstage/JobSearch](https://github.com/tylerrstage/JobSearch)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
 [product-screenshot]: images/app-overview.png
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
