@@ -17,6 +17,8 @@ firebase.js
 serviceAccountKey.json
 .env
 
+images/*
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
